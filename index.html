@@ -2,8 +2,8 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🎉 Selamat Milad Marsya! 🎉</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>🎉 Milad Mubarak Marsya! 🎉</title>
     <style>
         * {
             margin: 0;
@@ -15,6 +15,9 @@
             background: #0a0f1e;
             overflow: hidden;
             font-family: 'Segoe UI', 'Arial', sans-serif;
+            width: 100%;
+            height: 100%;
+            position: fixed;
         }
 
         #fireworksCanvas {
@@ -38,12 +41,14 @@
             text-align: center;
             transition: opacity 0.6s ease;
             filter: drop-shadow(0 20px 30px rgba(0,0,0,0.7));
+            width: 90%;
+            max-width: 340px;
         }
 
         /* Amplop */
         .envelope {
-            width: 320px;
-            height: 220px;
+            width: 100%;
+            aspect-ratio: 320 / 220;
             background: #fad6a5;
             position: relative;
             border-radius: 16px 16px 12px 12px;
@@ -51,9 +56,9 @@
             border: 4px solid #b57c48;
             transform-origin: center;
             overflow: hidden;
+            margin: 0 auto;
         }
 
-        /* Pola lego (kotak-kotak) */
         .envelope .lego-pattern {
             position: absolute;
             top: 0;
@@ -67,23 +72,21 @@
             pointer-events: none;
         }
 
-        /* Flap amplop */
         .flap {
             position: absolute;
-            top: -35px;
+            top: -15%;
             left: 0;
             width: 0;
             height: 0;
-            border-left: 160px solid transparent;
-            border-right: 160px solid transparent;
-            border-bottom: 60px solid #f5bc7c;
+            border-left: 50% solid transparent;
+            border-right: 50% solid transparent;
+            border-bottom: 27% solid #f5bc7c;
             transform-origin: top;
             transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
             z-index: 4;
             filter: drop-shadow(0 -8px 8px rgba(0,0,0,0.2));
         }
 
-        /* Badan amplop */
         .body {
             position: absolute;
             bottom: 0;
@@ -95,7 +98,6 @@
             z-index: 3;
         }
 
-        /* Hiasan garis tepi */
         .border-decor {
             position: absolute;
             top: 8px;
@@ -108,15 +110,14 @@
             pointer-events: none;
         }
 
-        /* Nama Marsya di dalam amplop (tulisan kecil) */
         .name-inside {
             position: absolute;
-            bottom: 20px;
+            bottom: 10px;
             left: 0;
             width: 100%;
             text-align: center;
             color: #8b5a2b;
-            font-size: 1.4rem;
+            font-size: clamp(1rem, 4vw, 1.4rem);
             font-weight: bold;
             font-family: 'Comic Sans MS', cursive;
             text-shadow: 2px 2px 0 #f5e1c0;
@@ -124,12 +125,13 @@
             pointer-events: none;
             opacity: 0.9;
             transform: rotate(-2deg);
+            padding: 0 5px;
         }
 
-        /* Kupu-kupu statis di sekitar amplop (tetap ada) */
+        /* Kupu-kupu statis */
         .butterfly-static {
             position: absolute;
-            font-size: 2.5rem;
+            font-size: clamp(1.8rem, 6vw, 2.5rem);
             user-select: none;
             pointer-events: none;
             filter: drop-shadow(0 0 8px hotpink);
@@ -137,43 +139,42 @@
             opacity: 0.9;
         }
 
-        .b1 { top: -50px; left: -40px; transform: rotate(-20deg); }
-        .b2 { bottom: -50px; right: -40px; transform: rotate(25deg); }
-        .b3 { top: -30px; right: -30px; transform: rotate(15deg); }
-        .b4 { bottom: -30px; left: -30px; transform: rotate(-10deg); }
+        .b1 { top: -15%; left: -10%; transform: rotate(-20deg); }
+        .b2 { bottom: -15%; right: -10%; transform: rotate(25deg); }
+        .b3 { top: -10%; right: -8%; transform: rotate(15deg); }
+        .b4 { bottom: -10%; left: -8%; transform: rotate(-10deg); }
 
-        /* Animasi goyang */
         .shake {
             animation: shake 0.5s infinite ease-in-out;
         }
 
         @keyframes shake {
             0% { transform: translateX(0); }
-            25% { transform: translateX(-10px); }
-            75% { transform: translateX(10px); }
+            25% { transform: translateX(-4px); }
+            75% { transform: translateX(4px); }
             100% { transform: translateX(0); }
         }
 
         .envelope.open .flap {
-            transform: rotateX(180deg) translateY(-40px);
+            transform: rotateX(180deg) translateY(-20%);
         }
 
         .click-text {
             color: white;
-            margin-top: 25px;
-            font-size: 1.4rem;
+            margin-top: 15px;
+            font-size: clamp(1rem, 4vw, 1.4rem);
             text-shadow: 0 0 20px gold, 0 0 40px orange;
             background: rgba(0, 0, 0, 0.5);
-            padding: 12px 28px;
+            padding: 10px 16px;
             border-radius: 60px;
             display: inline-block;
             backdrop-filter: blur(5px);
             border: 2px solid rgba(255, 215, 0, 0.8);
             font-weight: bold;
-            letter-spacing: 2px;
+            letter-spacing: 1px;
+            max-width: 90%;
         }
 
-        /* Container kupu-kupu terbang (hanya saat amplop dibuka) */
         .flying-butterflies {
             position: absolute;
             top: 0;
@@ -186,7 +187,7 @@
 
         .fly {
             position: absolute;
-            font-size: 2.5rem;
+            font-size: clamp(2rem, 6vw, 2.5rem);
             opacity: 0.9;
             filter: drop-shadow(0 0 12px currentColor);
             animation: flyAnim 5s linear forwards;
@@ -202,7 +203,7 @@
     </style>
 </head>
 <body>
-    <!-- Amplop dengan nama Marsya di dalamnya -->
+    <!-- Amplop -->
     <div class="envelope-container" id="envelopeContainer">
         <div class="envelope shake" id="envelope">
             <div class="lego-pattern"></div>
@@ -210,7 +211,6 @@
             <div class="body"></div>
             <div class="border-decor"></div>
             <div class="name-inside">✨ Marsya Suci Nur Utami ✨</div>
-            <!-- Kupu-kupu statis -->
             <div class="butterfly-static b1">🦋</div>
             <div class="butterfly-static b2">🦋</div>
             <div class="butterfly-static b3">🦋</div>
@@ -219,14 +219,11 @@
         <div class="click-text">💖 Klik untuk membuka kejutan 💖</div>
     </div>
 
-    <!-- Tempat kupu-kupu terbang (hanya muncul saat amplop dibuka) -->
     <div class="flying-butterflies" id="butterflyContainer"></div>
-
     <canvas id="fireworksCanvas"></canvas>
 
     <script>
         (function() {
-            // ========== INISIALISASI CANVAS ==========
             const canvas = document.getElementById('fireworksCanvas');
             const ctx = canvas.getContext('2d');
 
@@ -237,23 +234,22 @@
             window.addEventListener('resize', resizeCanvas);
             resizeCanvas();
 
-            // ========== UCAPAN UNTUK MARSYA ==========
+            // ========== UCAPAN BARU UNTUK MARSYA ==========
             const messages = [
-                "Untuk Marsya Suci Nur Utami ❤️",
-                "Selamat Milad, semoga Allah selalu memberkahimu.",
-                "Semoga usiamu bertambah dengan iman yang semakin kuat.",
-                "Semoga hafalan Al-Qur’anmu semakin lancar dan mutqin.",
-                "Jadilah anak shalihah yang selalu cinta Al-Qur’an.",
-                "Semoga setiap ayat yang kau hafal menjadi cahaya hidupmu.",
-                "Semoga langkahmu selalu dijaga oleh Allah.",
-                "Teruslah menjadi kebanggaan orang tua dan gurumu.",
-                "Semoga ilmu dan hafalanmu membawa banyak keberkahan.",
-                "Barakallahu fii umrik, semoga menjadi penjaga Al-Qur’an yang mulia."
+                "Milad Mubarak, santri shalihah! 🎉",
+                "Semoga hafalan makin lancar.",
+                "Murojaahnya makin rajin ya.",
+                "Qur’an selalu di hati.",
+                "Jadi kebanggaan orang tua.",
+                "Jadi kebanggaan para guru.",
+                "Ilmunya makin berkah.",
+                "Senyum dan semangat terus!",
+                "Calon penjaga Al-Qur’an. 🌙"
             ];
 
-            let messageIndex = 0;  // indeks pesan yang akan ditampilkan berikutnya
+            let messageIndex = 0;
 
-            // ========== FUNGSI KUPU-KUPU TERBANG SAAT AMPLOP DIBUKA ==========
+            // ========== KUPU-KUPU TERBANG ==========
             function releaseButterflies() {
                 const container = document.getElementById('butterflyContainer');
                 const centerX = window.innerWidth / 2;
@@ -264,7 +260,6 @@
                     b.innerHTML = '🦋';
                     b.style.left = centerX + 'px';
                     b.style.top = centerY + 'px';
-                    // Arah terbang acak
                     const tx = (Math.random() - 0.5) * 800;
                     const ty = (Math.random() - 0.8) * 600 - 100;
                     b.style.setProperty('--tx', tx + 'px');
@@ -272,47 +267,56 @@
                     const hue = Math.random() * 360;
                     b.style.color = `hsl(${hue}, 100%, 65%)`;
                     container.appendChild(b);
-
-                    setTimeout(() => {
-                        if (b.parentNode) b.remove();
-                    }, 5000);
+                    setTimeout(() => b.remove(), 5000);
                 }
             }
 
-            // ========== FUNGSI MENAMPILKAN UCAPAN (TANPA HIASAN KUPU) ==========
+            // ========== FUNGSI MENAMPILKAN UCAPAN (RESPONSIF, TIDAK TERPOTONG) ==========
             function showMessage(text, x, y, color) {
                 const msg = document.createElement('div');
                 msg.textContent = text;
                 msg.style.position = 'absolute';
-                msg.style.left = x + 'px';
-                msg.style.top = y + 'px';
+                // Batasi posisi agar tidak keluar layar
+                let left = Math.min(Math.max(x, 20), window.innerWidth - 20);
+                let top = Math.min(Math.max(y, 20), window.innerHeight - 20);
+                msg.style.left = left + 'px';
+                msg.style.top = top + 'px';
                 msg.style.color = color;
-                msg.style.fontSize = 'clamp(1.5rem, 5vw, 2.8rem)'; // responsif
+                msg.style.fontSize = 'clamp(1.2rem, 6vw, 2.5rem)';
                 msg.style.fontWeight = 'bold';
                 msg.style.fontFamily = "'Segoe UI', 'Arial', sans-serif";
-                msg.style.textShadow = `0 0 30px ${color}, 0 0 60px white`;
+                msg.style.textShadow = `0 0 20px ${color}, 0 0 40px black`;
                 msg.style.zIndex = '30';
-                msg.style.whiteSpace = 'nowrap';
+                msg.style.maxWidth = '80vw';  // tidak lebih dari 80% lebar layar
+                msg.style.whiteSpace = 'normal';
+                msg.style.wordBreak = 'break-word';
+                msg.style.textAlign = 'center';
                 msg.style.transform = 'translate(-50%, -50%)';
                 msg.style.pointerEvents = 'none';
                 msg.style.opacity = '1';
                 msg.style.transition = 'opacity 2s ease, transform 2s ease';
-                msg.style.letterSpacing = '2px';
-                msg.style.textAlign = 'center';
+                msg.style.letterSpacing = '1px';
+                msg.style.lineHeight = '1.4';
+                msg.style.padding = '10px 20px';
+                msg.style.background = 'rgba(0, 0, 0, 0.5)';
+                msg.style.borderRadius = '50px';
+                msg.style.backdropFilter = 'blur(5px)';
+                msg.style.border = '2px solid rgba(255,255,255,0.3)';
+                msg.style.boxShadow = '0 0 30px rgba(0,0,0,0.5)';
                 document.body.appendChild(msg);
 
                 // Memudar dan naik sedikit
                 setTimeout(() => {
                     msg.style.opacity = '0';
                     msg.style.transform = 'translate(-50%, -80px)';
-                }, 500);
+                }, 800);
 
                 setTimeout(() => {
                     if (msg.parentNode) msg.remove();
                 }, 3000);
             }
 
-            // ========== PARTIKEL KEMBANG API (LINGKARAN & KOTAK) ==========
+            // ========== PARTIKEL KEMBANG API ==========
             class Particle {
                 constructor(x, y, color, shape = 'circle') {
                     this.x = x;
@@ -411,7 +415,7 @@
                 }
             }
 
-            // ========== PELUNCURAN ROKET DENGAN PESAN BERURUT ==========
+            // ========== PELUNCURAN ==========
             let fireworks = [];
             let frame = 0;
             let fireworksActive = false;
@@ -419,10 +423,8 @@
             function launchFromRight() {
                 const startX = canvas.width + 80;
                 const startY = canvas.height + 80;
-                // Target acak di sekitar tengah, agak menyebar
                 const targetX = canvas.width / 2 + (Math.random() - 0.5) * 300;
                 const targetY = canvas.height / 2 - 50 + (Math.random() - 0.5) * 200;
-                // Ambil pesan berikutnya (siklik)
                 const msg = messages[messageIndex % messages.length];
                 messageIndex++;
                 fireworks.push(new Firework(startX, startY, targetX, targetY, msg));
@@ -438,14 +440,13 @@
                 fireworks.push(new Firework(startX, startY, targetX, targetY, msg));
             }
 
-            // ========== ANIMASI UTAMA ==========
+            // ========== ANIMASI ==========
             function animate() {
                 ctx.fillStyle = 'rgba(10, 15, 30, 0.3)';
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
 
                 if (fireworksActive) {
                     frame++;
-                    // Interval lebih panjang (120 frame ≈ 2 detik) agar teks tidak bertumpuk
                     if (frame % 120 === 0) {
                         launchFromRight();
                     }
@@ -474,22 +475,18 @@
             const envelopeContainer = document.getElementById('envelopeContainer');
             const envelope = document.getElementById('envelope');
 
-            function startFireworksAndHideEnvelope() {
-                fireworksActive = true;
-                envelopeContainer.style.opacity = '0';
-                setTimeout(() => {
-                    envelopeContainer.style.display = 'none';
-                }, 600);
-            }
-
             envelopeContainer.addEventListener('click', function() {
                 envelopeContainer.style.pointerEvents = 'none';
                 envelope.classList.remove('shake');
                 envelope.classList.add('open');
-                releaseButterflies();  // kupu-kupu terbang sesaat
+                releaseButterflies();
 
                 setTimeout(() => {
-                    startFireworksAndHideEnvelope();
+                    fireworksActive = true;
+                    envelopeContainer.style.opacity = '0';
+                    setTimeout(() => {
+                        envelopeContainer.style.display = 'none';
+                    }, 600);
                 }, 800);
             });
 
